@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Catalogo Videoteca</h1>
+
+<p>Totale giochi: {{ totalegiochi }}</p> {# Variabile contesto #}
+
+<ul>
+    {% for gioco in giochi %}
+        {% if gioco.categoria == 'FPS' %}
+            <li><strong>{{ gioco.titolo|upper }}</strong> {#Filtro UPPER #}</li>
+        {% else %}
+            <li>{{ gioco.titolo }}</li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endblock %}

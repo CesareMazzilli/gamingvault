@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {# Eredita layout #}
+
+{% block content %}
+<h1>I nostri giochi</h1>
+
+<ul>
+    {% for gioco in giochi %} {# Ciclo su contesto #}
+        <li>{{ gioco.titolo }} {{ gioco.categoria }} ({{ gioco.anno }}) {% if gioco.genere %} - {{ gioco.genere }}</li>
+    {% endif %}
+        {# Fallback #}
+    {% endfor %}
+</ul>
+{% endblock %}

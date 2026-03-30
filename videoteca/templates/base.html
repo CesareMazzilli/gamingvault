@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+<title>Videoteca Django</title>
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+<!--Navigazione dinamica-->
+<nav>
+    <a href="{% url 'home' %}">Home</a> |
+    <a href="{% url 'lista' %}">Giochi</a> |
+    <a href="{% url 'catalogo' %}">Catalogo</a> |
+    <a href="/admin/">Admin</a> |
+    <a href="{% url 'aggiungi' %}">Aggiungi gioco</a> |
+    {% if user.is_authenticated %}
+        Ciao {{ user.username }} |
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer;">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</nav>
+{% block content %}{% endblock %}
+<footer>2026- Corso Python</footer>
+</body>
+</html>

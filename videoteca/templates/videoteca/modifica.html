@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Modifica {{ gioco.titolo }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <label>Titolo: <input name="titolo" value="{{ gioco.titolo }}"></label>
+    <label>Categoria: <input name="categoria" value="{{ gioco.categoria }}"></label>
+    <label>Anno: <input type="number" name="anno" value="{{ gioco.anno }}"></label>
+    <button>Salva</button>
+</form>
+{% endblock %}

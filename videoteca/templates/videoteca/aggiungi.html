@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Aggiungi Gioco</h1>
+<form method="post">
+    {% csrf_token %}
+    <label>Titolo: <input name="titolo"></label>
+    <label>Categoria: <input name="categoria"></label>
+    <label>Anno: <input type="number" name="anno"></label>
+    <button>Aggiungi</button>
+</form>
+{% endblock %}
