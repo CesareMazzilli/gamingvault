@@ -12,7 +12,8 @@ giochi = [
 ]
 
 def home(request):
-    return HttpResponse("Benvenuti nella Videoteca Django!")
+    #return HttpResponse("Benvenuti in Django Gaming!")
+    return render(request, 'videoteca/home.html')
 
 def lista_giochi(request):
 # Passa la lista al template (come return di funzione)
@@ -28,10 +29,10 @@ def dettaglio_gioco(request, id):
     )
     
 def catalogo(request):
-    # Nuovo: totalegiochi + filtri nel template
+    giochi_db = Gioco.objects.all() 
     return render(request, 'videoteca/catalogo.html', {
-        'giochi': giochi,
-        'totalegiochi': len(giochi)
+        'giochi': giochi_db,
+        'totalegiochi': giochi_db.count()
     })
 
 @login_required    
@@ -40,9 +41,10 @@ def aggiungigioco(request):
         Gioco.objects.create(
             titolo=request.POST['titolo'],
             categoria=request.POST['categoria'],
-            anno=int(request.POST['anno'])
+            anno=int(request.POST['anno']),
+            recensione=request.POST.get('recensione', ''),
         )
-        return redirect('lista')
+        return redirect('catalogo') 
     return render(request, 'videoteca/aggiungi.html')
 
 @login_required
@@ -52,8 +54,9 @@ def modificagioco(request, id):
         gioco.titolo = request.POST['titolo']
         gioco.categoria = request.POST['categoria']
         gioco.anno = int(request.POST['anno'])
+        gioco.recensione = request.POST.get('recensione', '')
         gioco.save()
-        return redirect('lista')
+        return redirect('catalogo')
     return render(request, 'videoteca/modifica.html', {'gioco': gioco})
 
 @login_required

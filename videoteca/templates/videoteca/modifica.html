@@ -1,11 +1,47 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h1>Modifica {{ gioco.titolo }}</h1>
-<form method="post">
-    {% csrf_token %}
-    <label>Titolo: <input name="titolo" value="{{ gioco.titolo }}"></label>
-    <label>Categoria: <input name="categoria" value="{{ gioco.categoria }}"></label>
-    <label>Anno: <input type="number" name="anno" value="{{ gioco.anno }}"></label>
-    <button>Salva</button>
-</form>
+<div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h1>Modifica: {{ gioco.titolo }}</h1>
+
+    <form method="POST" style="display: flex; flex-direction: column; gap: 15px; background: #1a1d24; padding: 25px; border-radius: 12px; border: 1px solid #8b5cf6;">
+        {% csrf_token %}
+        
+        <!-- Campo Titolo -->
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: bold; color: #8b5cf6;">Titolo</label>
+            <input type="text" name="titolo" value="{{ gioco.titolo }}" required 
+                   style="padding: 10px; border-radius: 5px; border: 1px solid #333; background: #0b0e14; color: white;">
+        </div>
+
+        <!-- Campo Categoria -->
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: bold; color: #8b5cf6;">Categoria</label>
+            <input type="text" name="categoria" value="{{ gioco.categoria }}" required 
+                   style="padding: 10px; border-radius: 5px; border: 1px solid #333; background: #0b0e14; color: white;">
+        </div>
+
+        <!-- Campo Anno -->
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: bold; color: #8b5cf6;">Anno di uscita</label>
+            <input type="number" name="anno" value="{{ gioco.anno }}" required 
+                   style="padding: 10px; border-radius: 5px; border: 1px solid #333; background: #0b0e14; color: white;">
+        </div>
+
+        <!-- NUOVO: Campo Recensione -->
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: bold; color: #8b5cf6;">La tua Recensione</label>
+            <textarea name="recensione" placeholder="Cosa ne pensi di questo gioco?" 
+                      style="padding: 10px; border-radius: 5px; border: 1px solid #333; background: #0b0e14; color: white; min-height: 120px; font-family: inherit; resize: vertical;">{{ gioco.recensione }}</textarea>
+        </div>
+
+        <!-- Pulsanti di azione -->
+        <div style="display: flex; gap: 15px; margin-top: 10px; align-items: center;">
+            <button type="submit" class="btn" style="background: #8b5cf6; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1;">
+                SALVA MODIFICHE
+            </button>
+            <a href="{% url 'catalogo' %}" style="color: #aaa; text-decoration: none; font-size: 0.9rem;">Annulla</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

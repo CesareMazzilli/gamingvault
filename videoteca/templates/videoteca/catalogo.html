@@ -1,15 +1,41 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center;">
-    <h1>Catalogo Videoteca</h1>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px">
+    <h1>Catalogo Giochi</h1>
     <p>Giochi in collezione: <strong>{{ totalegiochi }}</strong></p>
 </div>
 
+<!-- Sezione Aggiunta Rapida con Recensione -->
+{% if user.is_authenticated %}
+<div style="background: #1a1d24; padding: 20px; border-radius: 12px; border: 1px solid #8b5cf6; margin-bottom: 30px;">
+    <h3 style="margin-top:0">Aggiungi nuovo gioco al Vault</h3>
+    <form method="POST" action="{% url 'aggiungi' %}" style="display: grid; gap: 15px;">
+        {% csrf_token %}
+        
+        <!-- Riga Superiore: Titolo, Categoria, Anno -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="text" name="titolo" placeholder="Titolo" required style="padding: 8px; border-radius: 4px; border: 1px solid #333; background: #0b0e14; color: white; flex: 2;">
+            
+            <input type="text" name="categoria" placeholder="Categoria" required style="padding: 8px; border-radius: 4px; border: 1px solid #333; background: #0b0e14; color: white; flex: 1;">
+            
+            <input type="number" name="anno" placeholder="Anno" required style="padding: 8px; border-radius: 4px; border: 1px solid #333; background: #0b0e14; color: white; width: 100px;">
+        </div>
+
+        <!-- Riga Inferiore: Recensione -->
+        <textarea name="recensione" placeholder="Scrivi qui la tua recensione (opzionale)..." style="padding: 8px; border-radius: 4px; border: 1px solid #333; background: #0b0e14; color: white; min-height: 80px; font-family: inherit;"></textarea>
+        
+        <button type="submit" class="btn" style="background: #8b5cf6; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">SALVA NEL VAULT</button>
+    </form>
+</div>
+{% endif %}
+
 <ul class="game-grid">
     {% for gioco in giochi %}
+        <!-- Passiamo 4 parametri: ID, Titolo, Categoria, Recensione -->
         <li class="game-card" style="cursor: pointer"
-            onclick="showDetails('{{ gioco.titolo|escapejs }}', '{{ gioco.categoria|escapejs }}')">
+            onclick="showDetails('{{ gioco.id }}', '{{ gioco.titolo|escapejs }}', '{{ gioco.categoria|escapejs }}', '{{ gioco.recensione|escapejs }}')">
+            
             {% if gioco.categoria == 'FPS' %}
                 <span class="fps-badge">TARGET ACQUIRED</span>
                 <strong style="color: #8b5cf6;">{{ gioco.titolo|upper }}</strong>
@@ -25,20 +51,49 @@
         <p>Il vault è vuoto. Inizia ad aggiungere qualche gioco!</p>
     {% endfor %}
 </ul>
-<!-- Struttura del Popup (Modal) -->
+
+<!-- Struttura del Popup (Modal) definitiva -->
 <div id="gameModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle"></h2>
-        <p id="modalCategory"></p>
-        <button class="btn" onclick="closeModal()">Chiudi</button>
+        <h2 id="modalTitle" style="margin-bottom: 5px;"></h2>
+        <p id="modalCategory" style="color: #8b5cf6; font-weight: bold; margin-top: 0;"></p>
+        
+        <hr style="border: 0; border-top: 1px solid #333; margin: 15px 0;">
+        
+        <p id="modalReview" style="font-style: italic; color: #ccc; line-height: 1.5; text-align: left; background: #0b0e14; padding: 10px; border-radius: 5px;"></p>
+        
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+            <!-- Link dinamico per la modifica -->
+            {% if user.is_authenticated %}
+                <a id="editLink" href="#" class="btn" style="background: #f59e0b; color: white; text-decoration: none; padding: 8px 15px; border-radius: 4px; font-weight: bold;">Modifica / Recensisci</a>
+            {% endif %}
+            <button class="btn" onclick="closeModal()" style="background: #444; border: none; padding: 8px 20px; color: white; border-radius: 4px; cursor: pointer;">Chiudi</button>
+        </div>
     </div>
 </div>
 
 <script>
-function showDetails(title, category) {
+// La funzione accetta 4 parametri: id del gioco per il link di modifica
+function showDetails(id, title, category, review) {
     document.getElementById('modalTitle').innerText = title;
     document.getElementById('modalCategory').innerText = "Categoria: " + category;
+    
+    // Gestione testo recensione
+    let reviewElement = document.getElementById('modalReview');
+    if (!review || review === 'None' || review.trim() === '') {
+        reviewElement.innerText = "Nessuna recensione salvata per questo gioco.";
+    } else {
+        reviewElement.innerText = "“" + review + "”";
+    }
+    
+    // Aggiornamento dinamico del link di modifica
+    // NB: Assicurati che l'URL nel tuo urls.py accetti l'ID in questo formato
+    let editBtn = document.getElementById('editLink');
+    if (editBtn) {
+        editBtn.href = "/modifica/" + id + "/";
+    }
+    
     document.getElementById('gameModal').style.display = "flex";
 }
 
@@ -46,7 +101,6 @@ function closeModal() {
     document.getElementById('gameModal').style.display = "none";
 }
 
-// Chiudi il popup se clicchi fuori dal rettangolo bianco
 window.onclick = function(event) {
     let modal = document.getElementById('gameModal');
     if (event.target == modal) {
