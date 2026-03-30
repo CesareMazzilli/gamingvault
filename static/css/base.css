@@ -1,28 +1,117 @@
+/* Layout Generale */
 body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    line-height: 1.6;
     margin: 0;
-    background: #121212;
-    color: #e4e4e4;
+    padding: 0;
 }
 
+/* Navigazione */
 nav {
-    background: #1f1f1f;
-    padding: 12px 20px;
-    border-radius: 8px;
+    background-color: #1f1f1f;
+    padding: 1rem 2rem;
+    border-bottom: 2px solid #8b5cf6;
     display: flex;
+    align-items: center;
     gap: 15px;
 }
 
-nav a {
-    color: #e4e4e4;
+nav a,
+nav button {
+    color: #8b5cf6;
     text-decoration: none;
-    font-weight: 500;
-    margin-right: 15px;
-    transition: color 0.2s ease, opacity 0.2s ease;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
 nav a:hover {
-    color: #4dabf7;
-    opacity: 0.9;
+    color: #a78bfa;
+}
+
+/* Contenuto Principale */
+.main-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Griglia Catalogo */
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.game-card {
+    background: #1e1e1e;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #333;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    border-color: #8b5cf6;
+}
+
+.fps-badge {
+    background: #ef4444;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Stile per il Modal (Popup) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Sfondo semi-trasparente */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #1a1d24;
+    padding: 30px;
+    border: 2px solid #8b5cf6;
+    border-radius: 15px;
+    width: 300px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: white;
 }
