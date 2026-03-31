@@ -37,7 +37,6 @@
             onclick="showDetails('{{ gioco.id }}', '{{ gioco.titolo|escapejs }}', '{{ gioco.categoria|escapejs }}', '{{ gioco.recensione|escapejs }}')">
             
             {% if gioco.categoria == 'FPS' %}
-                <span class="fps-badge">TARGET ACQUIRED</span>
                 <strong style="color: #8b5cf6;">{{ gioco.titolo|upper }}</strong>
             {% else %}
                 <strong>{{ gioco.titolo }}</strong>
@@ -52,7 +51,6 @@
     {% endfor %}
 </ul>
 
-<!-- Struttura del Popup (Modal) definitiva -->
 <div id="gameModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -74,7 +72,6 @@
 </div>
 
 <script>
-// La funzione accetta 4 parametri: id del gioco per il link di modifica
 function showDetails(id, title, category, review) {
     document.getElementById('modalTitle').innerText = title;
     document.getElementById('modalCategory').innerText = "Categoria: " + category;
@@ -87,8 +84,6 @@ function showDetails(id, title, category, review) {
         reviewElement.innerText = "“" + review + "”";
     }
     
-    // Aggiornamento dinamico del link di modifica
-    // NB: Assicurati che l'URL nel tuo urls.py accetti l'ID in questo formato
     let editBtn = document.getElementById('editLink');
     if (editBtn) {
         editBtn.href = "/modifica/" + id + "/";
